@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour de Hanoï</title>
+    <style>
+        /* Style pour agrandir le cadre de l'iframe */
+        iframe {
+            width: 100%;
+            height: 500px; /* Vous pouvez ajuster la hauteur comme vous le souhaitez */
+            border: 1px solid #ccc;
+        }
+        /* Style pour le conteneur flex */
+        .container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        /* Style pour centrer le contenu */
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        /* Style pour le div solution */
+        #solution {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <select id="liste" onchange="nbCoups=0; solution.innerHTML = ''; hanoi(1, 3, this.value)">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+
+    <div id="solution"></div>
+
+    <div class="container">
+        <iframe src="http://championmath.free.fr/tourhanoi.htm"></iframe>
+    </div>
+
+    <script>
+        let nbCoups = 0;
+
+        function hanoi(tourDepart, tourArrivee, nbPieces) {
+            if (nbPieces == 0) return; // Cas de base : ne rien faire si aucun disque à déplacer
+
+            var tourIntermediaire = 6 - tourDepart - tourArrivee; // Calcul de la tour intermédiaire
+            hanoi(tourDepart, tourIntermediaire, nbPieces - 1); // Déplacer n-1 disques de la tour de départ à la tour intermédiaire
+            nbCoups++; // Incrémenter le compteur de coups
+            solution.innerHTML += "coup " + nbCoups + ": tour " + tourDepart + " -> " + tourArrivee + "<br>"; // Afficher le mouvement
+            hanoi(tourIntermediaire, tourArrivee, nbPieces - 1); // Déplacer n-1 disques de la tour intermédiaire à la tour d'arrivée
+        }
+
+        // Initialisation avec le nombre de disques sélectionné
+        document.getElementById('liste').addEventListener('change', function() {
+            nbCoups = 0; // Réinitialiser le compteur de coups
+            document.getElementById('solution').innerHTML = ''; // Effacer les mouvements précédents
+            hanoi(1, 3, this.value); // Appeler la fonction hanoi avec le nombre de disques sélectionné
+        });
+
+        // Exemple d'utilisation pour initialiser avec 3 disques
+        hanoi(1, 3, 3);
+    </script>
+</body>
+</html>
